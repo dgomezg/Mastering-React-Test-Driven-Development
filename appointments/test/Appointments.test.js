@@ -5,33 +5,34 @@ import Appointment from '../src/Appointment';
 const flushMicrotasks = () => Promise.resolve();
 
 describe('Appointment', () => {
-    it('renders the customer first name', async () => {
-        const customer = { firstname: 'Ashley' }
-        const container = document.createElement('div');
-        const root = createRoot(container);
 
+    let root;
+    let customer;
+
+    beforeEach(() => {
+        const container = document.createElement('div');
+        document.body.appendChild(container);
+        root = createRoot(container);
+    });
+
+
+    let render = async component => {
         await act(async () => {
-            root.render(<Appointment customer={customer}/>);
+            root.render(component);
             await flushMicrotasks();
         });
+    };
 
-        expect(container.textContent).toMatch('Ashley');
+    it('renders the customer first name', async () => {
+        customer = { firstname: 'Ashley' }
+        await render(<Appointment customer={customer}/>);
+        expect(document.body.textContent).toMatch('Ashley');
 
     });
 
     it('renders another customer first name', async () => {
-        const customer = { firstname: 'Jordan' }
-        const container = document.createElement('div');
-        document.body.appendChild(container);
-
-        const root = createRoot(container);
-
-        await act(async () => {
-            root.render(<Appointment customer={customer}/>);
-            await flushMicrotasks();
-        });
-
+        customer = { firstname: 'Jordan' }
+        await render(<Appointment customer={customer}/>)
         expect(document.body.textContent).toMatch('Jordan');
-
     });
 });
