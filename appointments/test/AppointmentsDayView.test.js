@@ -1,39 +1,26 @@
 import React, { act } from 'react';
 import { createRoot } from 'react-dom/client';
-import {Appointment, AppointmentsDayView} from '../src/Appointment';
+import {Appointment, AppointmentsDayView} from '../src/AppointmentsDayView';
 import userEvent from '@testing-library/user-event';
+import { render, screen } from '@testing-library/react';
+
 
 const flushMicrotasks = () => Promise.resolve();
 
 describe('Appointment', () => {
 
-    let root;
     let customer;
-
-    beforeEach(() => {
-        const container = document.createElement('div');
-        document.body.appendChild(container);
-        root = createRoot(container);
-    });
-
-
-    let render = async component => {
-        await act(async () => {
-            root.render(component);
-            await flushMicrotasks();
-        });
-    };
 
     it('renders the customer first name', async () => {
         customer = { firstname: 'Ashley' }
-        await render(<Appointment customer={customer}/>);
+        render(<Appointment customer={customer}/>);
         expect(document.body.textContent).toMatch('Ashley');
 
     });
 
     it('renders another customer first name', async () => {
         customer = { firstname: 'Jordan' }
-        await render(<Appointment customer={customer}/>)
+         render(<Appointment customer={customer}/>)
         expect(document.body.textContent).toMatch('Jordan');
     });
 });
@@ -54,38 +41,26 @@ describe('AppointmentsDayView', () => {
         }
     ];
 
-    const render = async component => {
-        await act(async () => {
-            root.render(component);
-            await flushMicrotasks();
-        });
-    };
-
-    beforeEach(() => {
-        container = document.createElement('div');
-        document.body.appendChild(container);
-        root = createRoot(container);
-    });
 
     it('renders a div with the right id', async () => {
-        await render(<AppointmentsDayView appointments={[]}/>);
+        const {container} = render(<AppointmentsDayView appointments={[]}/>);
         expect(container.querySelector('div#appointmentsDayView')).not.toBeNull();
     })
 
     it('initially shows a message saying threre are no appointments today', async() => {
-        await render(<AppointmentsDayView appointments={[]}/>);
+        const {container} = render(<AppointmentsDayView appointments={[]}/>);
         expect(container.textContent).toMatch('There are no appointments scheduled for today');
     })
 
     it('renders multiple appointments in an ol element', async () => {
-        await render(<AppointmentsDayView appointments={appointments}/>);
+        const {container} = render(<AppointmentsDayView appointments={appointments}/>);
         expect(
             container.querySelector('ol').children
         ).toHaveLength(2);
     })
 
     it('renders each appointment in a li element', async () => {
-        await render(<AppointmentsDayView appointments={appointments}/>);
+        const {container} = render(<AppointmentsDayView appointments={appointments}/>);
         expect(
             container.querySelectorAll('li')
         ).toHaveLength(2);
@@ -98,14 +73,14 @@ describe('AppointmentsDayView', () => {
     })
 
     it('selects the first appointment by default', async() => {
-        await render(<AppointmentsDayView appointments={appointments}/>);
+        const {container} = render(<AppointmentsDayView appointments={appointments}/>);
         expect(
             container.textContent
         ).toMatch('Ashley');
     })
 
     it('has a button element in each li', async () => {
-        await render(<AppointmentsDayView appointments={appointments}/>);
+        const {container} = render(<AppointmentsDayView appointments={appointments}/>);
         expect(
             container.querySelectorAll('li > button')
         ).toHaveLength(2);
@@ -115,9 +90,12 @@ describe('AppointmentsDayView', () => {
     })
 
     it('renders another appointment when selected', async () => {
-        await render(<AppointmentsDayView appointments={appointments}/>);
+        const {container} = render(<AppointmentsDayView appointments={appointments}/>);
+        const user = userEvent.setup();
+
         const button = container.querySelectorAll('li > button')[1];
-        await userEvent.setup().click(button);
+        await user.click(button);
+
         expect(
             container.textContent
         ).toMatch('Jordan');
