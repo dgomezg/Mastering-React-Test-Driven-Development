@@ -43,8 +43,14 @@ describe('AppointmentsDayView', () => {
     let container;
     const today = new Date();
     const appointments = [
-        { startsAt: today.setHours(12,0)},
-        { startsAt: today.setHours(13,0)}
+        {
+            startsAt: today.setHours(12,0),
+            customer: { firstname: 'Ashley' }
+        },
+        {
+            startsAt: today.setHours(13,0),
+            customer: { firstname: 'Jordan' }
+        }
     ];
 
     const render = async component => {
@@ -65,6 +71,11 @@ describe('AppointmentsDayView', () => {
         expect(container.querySelector('div#appointmentsDayView')).not.toBeNull();
     })
 
+    it('initially shows a message saying threre are no appointments today', async() => {
+        await render(<AppointmentsDayView appointments={[]}/>);
+        expect(container.textContent).toMatch('There are no appointments scheduled for today');
+    })
+
     it('renders multiple appointments in an ol element', async () => {
         await render(<AppointmentsDayView appointments={appointments}/>);
         expect(
@@ -83,5 +94,12 @@ describe('AppointmentsDayView', () => {
         expect(
             container.querySelectorAll('li')[1].textContent
         ).toEqual('13:00');
+    })
+
+    it('selects the first appointment by default', async() => {
+        await render(<AppointmentsDayView appointments={appointments}/>);
+        expect(
+            container.textContent
+        ).toMatch('Ashley');
     })
 });
