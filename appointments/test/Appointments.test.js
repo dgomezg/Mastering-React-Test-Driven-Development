@@ -1,6 +1,7 @@
 import React, { act } from 'react';
 import { createRoot } from 'react-dom/client';
 import {Appointment, AppointmentsDayView} from '../src/Appointment';
+import userEvent from '@testing-library/user-event';
 
 const flushMicrotasks = () => Promise.resolve();
 
@@ -101,5 +102,24 @@ describe('AppointmentsDayView', () => {
         expect(
             container.textContent
         ).toMatch('Ashley');
+    })
+
+    it('has a button element in each li', async () => {
+        await render(<AppointmentsDayView appointments={appointments}/>);
+        expect(
+            container.querySelectorAll('li > button')
+        ).toHaveLength(2);
+        expect(
+            container.querySelectorAll('li > button')[0].type
+        ).toEqual('button');
+    })
+
+    it('renders another appointment when selected', async () => {
+        await render(<AppointmentsDayView appointments={appointments}/>);
+        const button = container.querySelectorAll('li > button')[1];
+        await userEvent.setup().click(button);
+        expect(
+            container.textContent
+        ).toMatch('Jordan');
     })
 });
