@@ -1,8 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-export const CustomerForm = ({firstName}) => (
-    <form id='customer'>
-        <label htmlFor='firstName'>First name</label>
-        <input id='firstName' type='text' name='firstName' placeholder='First name' value={firstName} readOnly/>
-    </form>
-)
+export const CustomerForm = ({firstName, onSubmit}) => {
+    const [customer, setCustomer] = useState({ firstName });
+
+    const handleChangeFirstName = ( {target} ) => {
+        setCustomer( { ...customer, firstName: target.value } );
+    }
+
+    return (
+        <form id='customer' onSubmit={ () => onSubmit(customer) }>
+            <label htmlFor='firstName'>First name</label>
+            <input
+                id='firstName'
+                type='text'
+                name='firstName'
+                placeholder='First name'
+                value={firstName}
+                onChange={handleChangeFirstName}
+            />
+        </form>
+    )
+}
