@@ -11,18 +11,60 @@ describe('Appointment', () => {
 
     let customer;
 
-    it('renders the customer first name', async () => {
-        customer = { firstname: 'Ashley' }
+    it ('renders a table', () => {
+        const { container } = render(<Appointment customer={customer}/>);
+        expect(container.querySelector('#appointmentView > table')).not.toBeNull();
+    });
+
+    it('renders the customer first name', () => {
+        customer = { firstName: 'Ashley' }
         render(<Appointment customer={customer}/>);
         expect(document.body.textContent).toMatch('Ashley');
 
     });
 
-    it('renders another customer first name', async () => {
-        customer = { firstname: 'Jordan' }
-         render(<Appointment customer={customer}/>)
+    it('renders another customer first name',() => {
+        customer = { firstName: 'Jordan' }
+        render(<Appointment customer={customer}/>)
         expect(document.body.textContent).toMatch('Jordan');
     });
+
+    it('renders the customer last name', () => {
+        customer = { lastName: 'Smith' }
+        render(<Appointment customer={customer}/>);
+        expect(document.body.textContent).toMatch('Smith');
+    } )
+
+    it('renders the customer phone number', () => {
+        customer = {phoneNumber: '555-555-5555'};
+        render(<Appointment customer={customer}/>);
+        expect(document.body.textContent).toMatch('555-555-5555');
+    })
+
+    it('renders the stylist', () => {
+        const stylist = 'John';
+        render(<Appointment stylist={stylist}/>);
+        expect(document.body.textContent).toMatch(stylist);
+    })
+
+    it('renders the service', () => {
+        const service = 'Cut';
+        render(<Appointment service={service}/>);
+        expect(document.body.textContent).toMatch(service);
+    })
+
+    it('renders the notes field', () => {
+        const notes = 'Please call customer to confirm';
+        render(<Appointment notes={notes}/>);
+        expect(document.body.textContent).toMatch(notes);
+    })
+
+    it('renders the appointment time', () => {
+        const startsAt = new Date();
+        startsAt.setHours(12, 0);
+        render(<Appointment startsAt={startsAt}/>);
+        expect(document.body.textContent).toMatch('12:00');
+    })
 });
 
 describe('AppointmentsDayView', () => {
@@ -33,11 +75,13 @@ describe('AppointmentsDayView', () => {
     const appointments = [
         {
             startsAt: today.setHours(12,0),
-            customer: { firstname: 'Ashley' }
+            customer: {
+                firstName: 'Ashley'
+            }
         },
         {
             startsAt: today.setHours(13,0),
-            customer: { firstname: 'Jordan' }
+            customer: { firstName: 'Jordan' }
         }
     ];
 
