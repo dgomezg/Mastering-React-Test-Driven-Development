@@ -1,11 +1,6 @@
-import React, { act } from 'react';
-import { createRoot } from 'react-dom/client';
 import {Appointment, AppointmentsDayView} from '../src/AppointmentsDayView';
 import userEvent from '@testing-library/user-event';
-import { render, screen } from '@testing-library/react';
-
-
-const flushMicrotasks = () => Promise.resolve();
+import { render } from '@testing-library/react';
 
 describe('Appointment', () => {
 
@@ -69,8 +64,6 @@ describe('Appointment', () => {
 
 describe('AppointmentsDayView', () => {
 
-    let root;
-    let container;
     const today = new Date();
     const appointments = [
         {
