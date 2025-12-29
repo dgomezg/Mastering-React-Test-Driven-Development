@@ -1,3 +1,4 @@
+import React from 'react';
 import {Appointment, AppointmentsDayView} from '../src/AppointmentsDayView';
 import userEvent from '@testing-library/user-event';
 import { render } from '@testing-library/react';
